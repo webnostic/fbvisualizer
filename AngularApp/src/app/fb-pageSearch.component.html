@@ -1,0 +1,75 @@
+<mat-sidenav-container class="sidenav-container">
+
+        <mat-sidenav  #searchPanel mode="side" opened="true" align="start">
+            <div class="example-scrolling-content">
+                <mat-card class="card" mode="side" opened="true">
+                        <mat-card-content>
+                                <mat-input-container>
+                                    <input [(ngModel)]="pageObject.name" matInput placeholder = "Page Name">
+                                </mat-input-container>
+                                <mat-card-actions>
+                                    <button (click)="search()" mat-raised-button color="primary"> Search Pages </button>
+                                </mat-card-actions>
+                            
+                        </mat-card-content>
+                </mat-card>
+
+                <mat-card class="card">
+                        <mat-card-content>
+                            <mat-input-container>
+                                <input [(ngModel)]="pageObject.id" matInput placeholder = "Page Id">
+                            </mat-input-container>
+                            <mat-card-actions>
+                                <button (click)="getRecentPosts()" mat-raised-button color="primary">Get recent page posts</button>
+                            </mat-card-actions>
+                        </mat-card-content>
+                </mat-card>
+
+            <!--
+                <button mat-mini-fab class="sideNavToggleBtn" (click)="searchPanel.toggle()">
+                        <mat-icon><></mat-icon>
+                </button>       
+            -->
+            </div>
+        </mat-sidenav>
+   
+        <mat-sidenav  #selectionPanel mode="side" opened="true" align="end">
+                <mat-list>
+                    <mat-list-item *ngFor="let fbObj of selectedFbObject">
+                        <h3 matLine> {{fbObj.name}} </h3>
+                        <h4 matLine> {{fbObj.id}} </h4>
+                        <button (click)="removeItemFromList(fbObj)" mat-mini-fab color="accent">-</button>
+                    </mat-list-item>
+                    
+                </mat-list>
+
+                <button mat-mini-fab class="sideNavToggleBtn" (click)="analyze()"  color="primary">go</button>
+        </mat-sidenav>
+
+    <button mat-mini-fab class="sideNavToggleBtn" (click)="searchPanel.toggle();selectionPanel.toggle()">
+        <mat-icon><></mat-icon>
+    </button>
+
+    <div class="example-scrolling-content">
+
+        <div *ngFor="let search of fbService.searches | async">
+            <mat-card class="card">
+                <mat-card-title [routerLink]="['/searches', search.name]" style="cursor: pointer">{{search.name}}</mat-card-title>
+                <mat-card-content>{{search.id}}</mat-card-content>
+                <mat-card-actions>
+                    <button (click)="addItemToList(search)" mat-mini-fab color="primary">+</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+
+        <div *ngFor="let message of fbService.messages | async">
+            <mat-card class="card">
+                <mat-card-title [routerLink]="['/messages', message.owner]" style="cursor: pointer">id: {{message.id}}</mat-card-title>
+                <h3>{{message.id}}</h3>
+                <mat-card-content>{{message.created_time}}: {{message.message}}</mat-card-content>
+            </mat-card>
+        </div>
+
+    </div>
+
+</mat-sidenav-container>
